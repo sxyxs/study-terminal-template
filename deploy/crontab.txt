@@ -1,0 +1,4 @@
+# Replace <APP_DIR>. Times are in the server timezone. `%` must be escaped as `\%` in crontab.
+# Nightly SQLite backup, keep 14 days (.backup is a consistent snapshot even in WAL mode).
+# If sqlite3 is not on cron's default PATH, use its absolute path (`which sqlite3`).
+0 3 * * * mkdir -p <APP_DIR>/data/backups && sqlite3 <APP_DIR>/data/study.db ".backup <APP_DIR>/data/backups/study-$(date +\%F).db" && find <APP_DIR>/data/backups -name 'study-*.db' -mtime +14 -delete

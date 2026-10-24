@@ -1,0 +1,22 @@
+# systemd user unit. Replace <APP_DIR> (absolute path of this repo) and <Your/Timezone>, then:
+#   cp deploy/study-terminal.service ~/.config/systemd/user/
+#   systemctl --user daemon-reload && systemctl --user enable --now study-terminal
+[Unit]
+Description=Study Terminal (Next.js on 127.0.0.1:3210)
+After=network.target
+
+[Service]
+WorkingDirectory=<APP_DIR>
+Environment=NODE_ENV=production
+Environment=TZ=<Your/Timezone>
+Environment=PATH=/usr/local/bin:/usr/bin:/bin
+EnvironmentFile=<APP_DIR>/.env.local
+# prestart hook in package.json runs the DB migration before `next start`
+ExecStart=/usr/bin/npm run start
+Restart=on-failure
+RestartSec=5
+KillSignal=SIGINT
+TimeoutStopSec=15
+
+[Install]
+WantedBy=default.target
